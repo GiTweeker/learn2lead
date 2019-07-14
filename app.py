@@ -12,7 +12,7 @@ csrf = CSRFProtect()
 csrf.init_app(app)
 
 db = SQLAlchemy(app)
-
+from models import Resources,User
 
 @app.route('/')
 def home():
