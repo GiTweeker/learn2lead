@@ -1,0 +1,7 @@
+python manage.py db init
+This will create a folder named migrations in our project folder. To migrate using these created files, run
+python manage.py db migrate
+This should give a result like this.
+
+Now apply the migrations to the database using
+python manage.py db upgrade
