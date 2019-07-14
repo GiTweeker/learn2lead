@@ -1,0 +1,107 @@
+
+{#Parent Tempate#}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/open-iconic-bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/animate.css') }}"/>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/owl.carousel.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/owl.theme.default.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/magnific-popup.css') }}"/>
+
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/aos.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/ionicons.min.css') }}"/>
+
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-datepicker.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/jquery.timepicker.css') }}"/>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/flaticon.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/icomoon.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}"/>
+
+
+
+  </head>
+  <body>
+
+
+ {% macro navbar(navClasses) -%}
+
+   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light scrolled awake {{ navClasses }}" id="ftco-navbar">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">{{ config.APP_NAME }} </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="causes.html" class="nav-link">Causes</a></li>
+                <li class="nav-item active"><a href="{{ url_for('donateVolunteer') }}"  class="nav-link">Donate</a></li>
+                <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+                <li class="nav-item"><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li class="nav-item"><a href="event.html" class="nav-link">Events</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- END nav -->
+ <div>
+
+  {{ caller() }}
+ </div>
+
+
+
+{%- endmacro %}
+
+
+
+
+
+ {% block body %}{% endblock %}
+
+
+
+{% include 'footer.html' %}
+
+ <script  src="{{ url_for('static', filename = 'js/jquery.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/jquery-migrate-3.0.1.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/jquery.easing.1.3.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/jquery.waypoints.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/jquery.stellar.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/owl.carousel.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/jquery.magnific-popup.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/aos.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/jquery.animateNumber.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/bootstrap-datepicker.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/jquery.timepicker.min.js') }}"></script>
+ <script  src="{{ url_for('static', filename = 'js/scrollax.min.js') }}"></script>
+ <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+ <script  src="{{ url_for('static', filename = 'js/google-map.js') }}"></script>
+
+
+
+{# Template Specific Scripts#}
+ {% block templateScripts %}{% endblock %}
+
+  </body>
+</html>

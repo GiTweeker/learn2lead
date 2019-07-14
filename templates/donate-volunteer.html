@@ -1,0 +1,92 @@
+
+
+
+{% extends 'layout-base.html' %}
+{% block title %} {{ title }}{% endblock %}
+
+{% block body %}
+    <section class="ftco-section-3 img"
+             style="background-image: url('{{ url_for('static',filename = 'images/bg_3.jpg') }}');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row d-md-flex">
+
+                <div class="col-md-6 volunteer pl-md-5 ftco-animate">
+                    <h3 class="mb-3">Be a volunteer - Volunteer an Item.</h3>
+                    <form action="{{ url_for('donateVolunteer') }}" class="volunter-form" method="post">
+                     {{ form.csrf_token }}
+
+                        <div class="form-group">
+                            {{ form.name(class="form-control",  placeholder="Your Name") }}
+                          {#  <input type="text" class="form-control" placeholder="Your Name" name="name" value="">#}
+                        </div>
+                        <div class="form-group">
+                              {{ form.email(class="form-control",  placeholder="Your Email") }}
+                          {#  <input type="text" class="form-control" placeholder="Your Email" name="email">#}
+                        </div>
+                        <div class="form-group">
+                                {{ form.mobileno(class="form-control",  placeholder="Your Mobile Number") }}
+{#                            <input type="text" class="form-control" placeholder="Your Mobile Number" name="mobileno">#}
+                        </div>
+                        <div class="form-group">
+                            {{ form.contactadd(class="form-control",  placeholder="Contact Address", cols="35", rows="2") }}
+{#                            <textarea name="" id="" cols="30" rows="2" class="form-control"#}
+{#                                      placeholder="Contact Address"></textarea>#}
+                        </div>
+                        <div class="row d-md-flex">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    {{ form.itemcat(class="form-control",id="itemCategory") }}
+                     {#               <select class="form-control" id="itemCategory">
+                                        <option>Item Category</option>
+                                        <option>Sponsor</option>
+                                        <option>Infrastructure</option>
+                                        <option>Studytools</option>
+                                        <option>Writingtools</option>
+                                    </select>#}
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                        {{ form.itemtype(class="form-control",id="itemType") }}
+                                    {#<select class="form-control" id="itemType">
+                                        <option>Pencil</option>
+                                        <option>Eraser</option>
+                                        <option>School Fees</option>
+
+                                    </select>#}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+{#                            <textarea name="" id="" cols="30" rows="2" class="form-control"#}
+{#                                      placeholder="Description"></textarea>#}
+                                {{ form.itemdesc(class="form-control",  placeholder="Description", cols="35", rows="2") }}
+                        </div>
+                        <div class="form-group">
+                            <button class='btn  btn-white py-3 px-5 btn-block'>
+
+                                Volunteer Now&nbsp;
+                                <i class="flaticon-donation-1"></i>
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6 d-flex ftco-animate">
+                    <div class="img img-2 align-self-stretch"
+                         style="background-image: url('{{ url_for('static',filename = 'images/bg_4.jpg') }}');"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+{#Custom Scripts#}
+{% block templateScripts %}
+    <script src="{{ url_for('static', filename = 'js/main_donate.js') }}"></script>
+{% endblock %}
