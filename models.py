@@ -7,13 +7,18 @@ class Resources(db.Model):
     __tablename__ = 'resources'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category = db.Column(db.String())
-    name = db.Column(db.String())
-    status = db.Column(db.String())
-    donated_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    taken_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    requested_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    requested_by = db.relationship('User', backref='resources', lazy='dynamic')
+    category = db.Column(db.String(10),nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    status = db.Column(db.String(10),nullable=False)
+    donated_by_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=True)
+    donated_by = db.relationship('User', backref='resources', lazy='dynamic')
+    #donated_by = db.relationship('User', backref=db.backref('resources'), lazy='dynamic')
+
+    taken_by_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=True)
+    taken_by = db.relationship('User', backref='resources', lazy='dynamic')
+
+    requested_by_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=True)
+    requested_by = db.relationship('User', backref='resources', lazy='dynamic', uselist=False)
     created_at = db.Column(db.DateTime, default=func.now())
 
     def __init__(self,id,category,name,status,donated_by,taken_by,requested_by,created_at):
@@ -48,15 +53,15 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
-    phone_number = db.Column(db.String())
-    name = db.Column(db.String())
-    email = db.Column(db.String())
-    sex = db.Column(db.Integer)
-    user_type = db.Column(db.Integer)
-    dob = db.Column(db.Date)
-    user_class = db.Column(db.Integer)
+    phone_number = db.Column(db.String(20),nullable=False)
+    name = db.Column(db.String(255),nullable=False)
+    email = db.Column(db.String(255),nullable=False)
+    sex = db.Column(db.String(5),nullable=True)
+    user_type = db.Column(db.String(20),nullable=False)
+    dob = db.Column(db.Date,nullable=True)
+    user_class = db.Column(db.String(20),nullable=True)
     created_at = db.Column(db.DateTime, default=func.now())
-    address = db.Column(db.DateTime)
+    address = db.Column(db.String(255),nullable=False)
 
     def __init__(self,id,phone_number,name,email,sex,user_type,dob,user_class,created_at,address):
         self.id=id
