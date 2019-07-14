@@ -1,16 +1,17 @@
 
 from flask import Flask, render_template, request, flash
 from flask_wtf.csrf import CSRFProtect
-
+from flask_sqlalchemy import SQLAlchemy
 from form import DonateItemForm
 
 app = Flask(__name__,instance_relative_config=False)
-
-csrf = CSRFProtect()
 app.config.from_pyfile('config_file.cfg')
 
+
+csrf = CSRFProtect()
 csrf.init_app(app)
 
+db = SQLAlchemy(app)
 
 
 @app.route('/')
