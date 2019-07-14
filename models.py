@@ -1,18 +1,20 @@
 
-
+from sqlalchemy import func
 from app import db
 
 
 class Resources(db.Model):
     __tablename__ = 'resources'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     category = db.Column(db.String())
     name = db.Column(db.String())
     status = db.Column(db.String())
-    donated_by = db.Column(db.Integer)
-    taken_by = db.Column(db.Integer)
-    requested_by = db.Column(db.Integer)
+    donated_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    taken_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    requested_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    requested_by = db.relationship('User', backref='resources', lazy='dynamic')
+    created_at = db.Column(db.DateTime, default=func.now())
 
     def __init__(self,id,category,name,status,donated_by,taken_by,requested_by,created_at):
         self.id=id
@@ -22,7 +24,7 @@ class Resources(db.Model):
         self.donated_by=donated_by
         self.taken_by=taken_by
         self.requested_by=requested_by
-        created_at = db.Column(db.DateTime)
+        self.created_at = created_at
 
 
     def __repr__(self,):
@@ -43,17 +45,17 @@ class Resources(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     phone_number = db.Column(db.String())
     name = db.Column(db.String())
     email = db.Column(db.String())
     sex = db.Column(db.Integer)
     user_type = db.Column(db.Integer)
-    dob = db.Column(db.Integer)
+    dob = db.Column(db.Date)
     user_class = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=func.now())
     address = db.Column(db.DateTime)
 
     def __init__(self,id,phone_number,name,email,sex,user_type,dob,user_class,created_at,address):
