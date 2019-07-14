@@ -54,8 +54,9 @@ class User(db.Model):
     dob = db.Column(db.Integer)
     user_class = db.Column(db.Integer)
     created_at = db.Column(db.DateTime)
+    address = db.Column(db.DateTime)
 
-    def __init__(self,id,phone_number,name,email,sex,user_type,dob,user_class,created_at):
+    def __init__(self,id,phone_number,name,email,sex,user_type,dob,user_class,created_at,address):
         self.id=id
         self.phone_number=phone_number
         self.name=name
@@ -65,6 +66,7 @@ class User(db.Model):
         self.dob=dob
         self.user_class=user_class
         self.created_at=created_at
+        self.address=address
 
 
     def __repr__(self,):
@@ -82,4 +84,5 @@ class User(db.Model):
             'dob': self.dob,
             'user_class': self.user_class,
             'created_at': self.created_at,
+            'address': self.address,
         }
