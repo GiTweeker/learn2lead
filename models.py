@@ -78,6 +78,7 @@ class User(db.Model):
     user_type = db.Column(db.String(20),nullable=False)
     dob = db.Column(db.Date,nullable=True)
     user_class = db.Column(db.String(20),nullable=True)
+    school = db.Column(db.String(255),nullable=True)
     created_at = db.Column(db.DateTime, default=func.now())
     address = db.Column(db.String(255),nullable=False)
 
