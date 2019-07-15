@@ -2,14 +2,23 @@
 from sqlalchemy import func
 from app import db
 
+class ResourceCategories(db.Model):
+    __tablename__ = 'resource_categories'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), nullable=False)
+    short_name = db.Column(db.String(255), nullable=False)
 
 class Resources(db.Model):
     __tablename__ = 'resources'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category = db.Column(db.String(10),nullable=False)
+
+    category_id = db.Column(db.Integer, db.ForeignKey('resource_categories.id'), nullable=True)
+    category = db.relationship('ResourceCategories', backref='resources', lazy='dynamic')
+
     name = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(10),nullable=False)
+
     donated_by_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=True)
     donated_by = db.relationship('User', backref='resources', lazy='dynamic')
     #donated_by = db.relationship('User', backref=db.backref('resources'), lazy='dynamic')
@@ -19,6 +28,7 @@ class Resources(db.Model):
 
     requested_by_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=True)
     requested_by = db.relationship('User', backref='resources', lazy='dynamic', uselist=False)
+
     created_at = db.Column(db.DateTime, default=func.now())
 
     def __init__(self,id,category,name,status,donated_by,taken_by,requested_by,created_at):
