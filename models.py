@@ -8,13 +8,21 @@ class ResourceCategories(db.Model):
     name = db.Column(db.String(255), nullable=False)
     short_name = db.Column(db.String(255), nullable=False)
 
+class ResourceTypes(db.Model):
+    __tablename__ = 'resource_types'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), nullable=False)
+    short_name = db.Column(db.String(255), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('resource_categories.id'), nullable=True)
+    category = db.relationship('ResourceCategories', backref='resourcetypes', lazy='dynamic')
+
 class Resources(db.Model):
     __tablename__ = 'resources'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    category_id = db.Column(db.Integer, db.ForeignKey('resource_categories.id'), nullable=True)
-    category = db.relationship('ResourceCategories', backref='resources', lazy='dynamic')
+    type_id = db.Column(db.Integer, db.ForeignKey('resource_types.id'), nullable=True)
+    type = db.relationship('ResourceTypes', backref='resources', lazy='dynamic')
 
     name = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(10),nullable=False)
