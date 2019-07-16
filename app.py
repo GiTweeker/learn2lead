@@ -25,15 +25,24 @@ def home():
 def donateVolunteer():
     title = 'Volunteer a donation - Learn to lead is a platform for everybody.'
     tpl = 'donateVolunteer'
-    if(request.method == 'POST'):
-       form = DonateItemForm(request.form)
-       name = request.form['name']
-       print(name)
+    form = DonateItemForm(request.form)
+
+    if request.method == 'POST' :
+       if form.validate():
+         #form is valid handle here
+          #name = request.form['name']
+          print("heee")
+       else:
+           #invalid form
+           form.itemcat.choices = [(r.id, r.name) for
+                                   r in ResourceCategories.query.order_by(ResourceCategories.name)]
 
     else:
-        resourcesCategories  = ResourceCategories.query.order_by(ResourceCategories.name).all()
-        form = DonateItemForm()
-
+        # resourcesCategories  = ResourceCategories.query.order_by(ResourceCategories.name).all()
+        # resource_categories_list = [(i.id, i.name) for i in resourcesCategories]
+        #form = DonateItemForm()
+        form.itemcat.choices = [(r.id, r.name) for
+                                r in ResourceCategories.query.order_by(ResourceCategories.name)]
     return render_template('donate-volunteer.html',title=title,tpl=tpl,form=form)
 
 
