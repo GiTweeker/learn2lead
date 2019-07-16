@@ -12,7 +12,7 @@ csrf = CSRFProtect()
 csrf.init_app(app)
 
 db = SQLAlchemy(app)
-from models import Resources,User
+from models import Resources,Users,ResourceCategories,ResourceTypes
 
 @app.route('/')
 def home():
@@ -31,6 +31,7 @@ def donateVolunteer():
        print(name)
 
     else:
+        resourcesCategories  = ResourceCategories.query.order_by(ResourceCategories.name).all()
         form = DonateItemForm()
 
     return render_template('donate-volunteer.html',title=title,tpl=tpl,form=form)
