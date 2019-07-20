@@ -10,6 +10,7 @@ class UserType(enum.Enum):
 
 class ResourceStatus(enum.Enum):
     OPEN = 'open'
+    CLOSED = 'closed'
 resource_types_fields = {
     'name':   fields.String,
     'short_name':   fields.String,
@@ -79,14 +80,14 @@ def donateVolunteer():
         db.session.flush()
 
         requested_resource = Resources\
-            .query.filter_by(type_id=form.itemtype.data,status=ResourceStatus.OPEN.value)\
+            .query.filter_by(type_id=form.itemtype.data,status=ResourceStatus.OPEN.value,donated_by_id=None)\
             .order_by(desc(Resources.created_at)).first()
 
 
         if requested_resource is not None :
             db.session.query(Resources). \
                  filter(Resources.id == requested_resource.id). \
-                update({"donated_by_id": volunteer.id})
+                update({"donated_by_id": volunteer.id,"status":ResourceStatus.CLOSED.value})
 
             db.session.commit()
             db.session.flush()
