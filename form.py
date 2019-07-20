@@ -27,7 +27,7 @@ class DonateItemForm(FlaskForm):
                            [validators.length(min=3, max=200), validators.DataRequired()],
                            widget=TextArea())
     itemtype = ItemTypeSelectField(u'Item Type', [validators.DataRequired()],
-                           choices=[], coerce=int)
+                           choices=[(0, "")], coerce=int)
 
     itemcat = SelectField(u'Item  Category',
                           [validators.DataRequired()],
