@@ -1,37 +1,36 @@
-
 from sqlalchemy import func
 from app import db
+
+
 class Users(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.BigInteger, primary_key=True,autoincrement=True)
-    phone_number = db.Column(db.String(20),nullable=False)
-    name = db.Column(db.String(255),nullable=False)
-    email = db.Column(db.String(255),nullable=False)
-    sex = db.Column(db.String(5),nullable=True)
-    user_type = db.Column(db.String(20),nullable=False)
-    dob = db.Column(db.Date,nullable=True)
-    user_class = db.Column(db.String(20),nullable=True)
-    school = db.Column(db.String(255),nullable=True)
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    phone_number = db.Column(db.String(20), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    sex = db.Column(db.String(5), nullable=True)
+    user_type = db.Column(db.String(20), nullable=False)
+    dob = db.Column(db.Date, nullable=True)
+    user_class = db.Column(db.String(20), nullable=True)
+    school = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=func.now())
-    address = db.Column(db.String(255),nullable=False)
+    address = db.Column(db.String(255), nullable=False)
 
-    def __init__(self,id,phone_number,name,email,sex,user_type,dob,user_class,created_at,address):
-        self.id=id
-        self.phone_number=phone_number
-        self.name=name
-        self.email=email
-        self.sex=sex
-        self.user_type=user_type
-        self.dob=dob
-        self.user_class=user_class
-        self.created_at=created_at
-        self.address=address
+    def __init__(self, id, phone_number, name, email, sex, user_type, dob, user_class, created_at, address):
+        self.id = id
+        self.phone_number = phone_number
+        self.name = name
+        self.email = email
+        self.sex = sex
+        self.user_type = user_type
+        self.dob = dob
+        self.user_class = user_class
+        self.created_at = created_at
+        self.address = address
 
-
-    def __repr__(self,):
+    def __repr__(self):
         return '<id {}>'.format(self.id)
-
 
     def serialize(self):
         return {
@@ -47,11 +46,13 @@ class Users(db.Model):
             'address': self.address,
         }
 
+
 class ResourceCategories(db.Model):
     __tablename__ = 'resource_categories'
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     short_name = db.Column(db.String(255), nullable=False)
+
 
 class ResourceTypes(db.Model):
     __tablename__ = 'resource_types'
@@ -71,37 +72,35 @@ class Resources(db.Model):
     type = db.relationship('ResourceTypes', backref='resources')
 
     name = db.Column(db.String(255), nullable=False)
-    status = db.Column(db.String(10),nullable=False)
+    status = db.Column(db.String(10), nullable=False)
 
-    donated_by_id = db.Column(db.BigInteger, db.ForeignKey(Users.id),nullable=True)
+    donated_by_id = db.Column(db.BigInteger, db.ForeignKey(Users.id), nullable=True)
     donated_by = db.relationship('Users', backref='donated_by_resources', uselist=False,
                                  foreign_keys=[donated_by_id])
-    #donated_by = db.relationship('User', backref=db.backref('resources'), lazy='dynamic')
+    # donated_by = db.relationship('User', backref=db.backref('resources'), lazy='dynamic')
 
-    taken_by_id = db.Column(db.BigInteger, db.ForeignKey(Users.id),nullable=True)
+    taken_by_id = db.Column(db.BigInteger, db.ForeignKey(Users.id), nullable=True)
     taken_by = db.relationship('Users', backref='taken_by_resources', uselist=False,
-                                foreign_keys = [taken_by_id])
+                               foreign_keys=[taken_by_id])
 
-    requested_by_id = db.Column(db.BigInteger, db.ForeignKey(Users.id),nullable=True)
-    requested_by = db.relationship('Users', backref='requested_by_resources',  uselist=False,
-                                    foreign_keys = [requested_by_id])
+    requested_by_id = db.Column(db.BigInteger, db.ForeignKey(Users.id), nullable=True)
+    requested_by = db.relationship('Users', backref='requested_by_resources', uselist=False,
+                                   foreign_keys=[requested_by_id])
 
     created_at = db.Column(db.DateTime, default=func.now())
 
-    def __init__(self,id,category,name,status,donated_by_id,taken_by_id,requested_by_id,created_at):
-        self.id=id
-        self.category=category
-        self.name=name
-        self.status=status
-        self.donated_by_id=donated_by_id
-        self.taken_by_id=taken_by_id
-        self.requested_by_id=requested_by_id
+    def __init__(self, id, category, name, status, donated_by_id, taken_by_id, requested_by_id, created_at):
+        self.id = id
+        self.category = category
+        self.name = name
+        self.status = status
+        self.donated_by_id = donated_by_id
+        self.taken_by_id = taken_by_id
+        self.requested_by_id = requested_by_id
         self.created_at = created_at
 
-
-    def __repr__(self,):
+    def __repr__(self):
         return '<id {}>'.format(self.id)
-
 
     def serialize(self):
         return {
@@ -114,5 +113,3 @@ class Resources(db.Model):
             'requested_by_id': self.requested_by_id,
             'created_at': self.created_at
         }
-
-
