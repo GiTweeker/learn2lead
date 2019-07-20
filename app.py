@@ -1,9 +1,15 @@
 from flask_restful import Resource, Api, marshal,fields
-from flask import Flask, render_template, request, jsonify, json
+from flask import Flask, render_template, request, jsonify, json, url_for, redirect, flash, session
 from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 from form import DonateItemForm
+import enum
+class UserType(enum.Enum):
+    VOLUNTEER = 'volunteer'
 
+class ResourceStatus(enum.Enum):
+    OPEN = 'open'
 resource_types_fields = {
     'name':   fields.String,
     'short_name':   fields.String,
@@ -31,10 +37,15 @@ class ResourceCategoriesTypesApi(Resource):
             'data': [marshal(types, resource_types_fields) for types in resource_types]}
 
 
-
+@app.route('/test')
+def test():
+    session.setdefault('message','heeee')
+    return redirect(url_for('home'))
 
 @app.route('/')
 def home():
+    message  = session.pop('message',None)
+
     title = 'Learn to lead is a platform for everybody.'
     tpl = 'home'
     return render_template('index.html',title=title,tpl=tpl)
@@ -53,21 +64,63 @@ def donateVolunteer():
                             r in ResourceCategories.query.order_by(ResourceCategories.name)]
     if request.method == 'POST':
        if form.validate():
-         #form is valid handle here
-          #name = request.form['name']
-          print("heee")
+            #save resources and user
+        print("form is valid")
+        ##find if a resource exist that no volunteer exist for that type.. if none then create new resource
+
+        volunteer  = Users(form.mobileno.data,form.name.data, form.email.data
+                           ,None, UserType.VOLUNTEER.value, None, None, form.contactadd.data)
+
+        db.session.add(volunteer)
+        db.session.commit()
+        db.session.flush()
+
+        requested_resource = Resources\
+            .query.filter_by(type_id=form.itemtype.data,status=ResourceStatus.OPEN.value)\
+            .order_by(desc(Resources.created_at)).first()
+
+
+        if requested_resource is not None :
+
+            db.session.query(Resources). \
+                 filter(Resources.id == requested_resource.id). \
+                update({"donated_by_id": volunteer.id})
+
+            db.session.commit()
+            db.session.flush()
+
+            return render_template('donate-volunteer-done.html', title=title, tpl=tpl, resource=requested_resource)
+        else :
+            #type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at
+            volunteer_resource  = Resources(form.itemtype.data,form.itemdesc.data,ResourceStatus.OPEN.value,
+                                   volunteer.id,None,None)
+
+
+            db.session.add(volunteer_resource)
+            db.session.commit()
+            db.session.flush()
+
+            return render_template('donate-volunteer-done.html', title=title, tpl=tpl, resource=volunteer_resource)
+        # Redirect to page saying thank you for donating
+        #
+        #return render_template('index', title=title, tpl=tpl)
        else:
            #invalid form
+        #print(form.itemtype.data)
+        #print(form.errors)
 
-        pass
-
+        return render_template('donate-volunteer.html', title=title, tpl=tpl)
 
     else:
-        # resourcesCategories  = ResourceCategories.query.order_by(ResourceCategories.name).all()
-        # resource_categories_list = [(i.id, i.name) for i in resourcesCategories]
-        #form = DonateItemForm()
+
         form.itemcat.choices = [(r.id, r.name) for
                                 r in ResourceCategories.query.order_by(ResourceCategories.name)]
+
+        #implementation for retrieving the user that donated
+    volunteer_done  = Users.query.get(6)
+    #resource_done  = Resources.query.get(5)
+    #donated_by  = resource_done.donated_by
+    #return render_template('donate-volunteer-done.html',title=title,tpl=tpl,resource=resource_done)
     return render_template('donate-volunteer.html',title=title,tpl=tpl,form=form)
 
 

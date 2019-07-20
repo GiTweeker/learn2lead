@@ -1,6 +1,20 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,validators,SelectField
+
+from wtforms import StringField,validators,SelectField,ValidationError
 from wtforms.widgets import TextArea
+
+
+
+class ItemTypeSelectField(SelectField):
+    def pre_validate(self, form):
+        from models import ResourceTypes
+        if(self.data is  None):
+            raise ValidationError(u'Please select an item type')
+        elif ResourceTypes.query.filter_by(id=self.data).count() <= 0 :
+            raise ValidationError(u'Please select a valid item type')
+        else :
+            pass
+
 
 class DonateItemForm(FlaskForm):
     name = StringField("Your Name", [validators.Length(min=4, max=25), validators.DataRequired()])
@@ -12,8 +26,8 @@ class DonateItemForm(FlaskForm):
     itemdesc = StringField("Item Description",
                            [validators.length(min=3, max=200), validators.DataRequired()],
                            widget=TextArea())
-    itemtype = SelectField(u'Item Type', default="pencil",
-                           choices=[('pencil', 'Pencil'), ('eraser', 'Eraser'), ('schoolfees', 'School Fees')])
+    itemtype = ItemTypeSelectField(u'Item Type', [validators.DataRequired()],
+                           choices=[], coerce=int)
 
     itemcat = SelectField(u'Item  Category',
                           [validators.DataRequired()],

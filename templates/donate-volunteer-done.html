@@ -1,0 +1,64 @@
+
+
+
+{% extends 'layout-base.html' %}
+{% block title %} {{ title }}{% endblock %}
+
+{% block body %}
+    <section class="ftco-section-3 img"
+             style="background-image: url('{{ url_for('static',filename = 'images/bg_3.jpg') }}');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row d-md-flex">
+
+                <div class="col-md-6 volunteer pl-md-5 ftco-animate">
+                    <h3 class="mb-3">Thank You {{ resource.donated_by.name }} For donating.</h3>
+
+                    <ul class="list-group">
+                        <li class="list-group-item disabled"><i class="flaticon-donation-1"></i> &nbsp; Item
+                            : {{ resource.type.name }} - {{ resource.name }} </li>
+                        {% if resource.requested_by %}
+                            <li class="list-group-item"><i class="icon-user-circle"></i> &nbsp;To
+                                : {{ resource.requested_by.name }} </li>
+                        {% endif %}
+
+                        {% if resource.requested_by %}
+                            <li class="list-group-item"><i class="icon-phone"></i> &nbsp;Mobile Number :
+                                &nbsp; {{ resource.requested_by.phone_number }} </li>
+                        {% endif %}
+
+                        <li class="list-group-item">We appreciate your interest in donating to people in need.<br/>
+
+                            Please contact the user on the mobile number to complete the donation
+                        </li>
+
+                        <li class="list-group-item text-center">
+                            <a class='btn  btn-white  btn-block py-3 px-5'
+                               href="{{ url_for('home') }}"
+                               style="box-shadow: unset;-webkit-box-shadow: unset">
+
+                                Done&nbsp;
+                                <i class="icon-done"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <br>
+                </div>
+                <div class="col-md-6 d-flex ftco-animate">
+                    <div class="img img-2 align-self-stretch"
+                         style="background-image: url('{{ url_for('static',filename = 'images/bg_4.jpg') }}');"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
+
+{#Custom Scripts#}
+{% block templateScripts %}
+    <script src="{{ url_for('static', filename = 'js/main_donate.js') }}"></script>
+{% endblock %}

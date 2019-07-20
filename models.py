@@ -17,8 +17,8 @@ class Users(db.Model):
     created_at = db.Column(db.DateTime, default=func.now())
     address = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, id, phone_number, name, email, sex, user_type, dob, user_class, created_at, address):
-        self.id = id
+    def __init__(self,phone_number, name, email, sex, user_type, dob, user_class, address):
+
         self.phone_number = phone_number
         self.name = name
         self.email = email
@@ -26,7 +26,6 @@ class Users(db.Model):
         self.user_type = user_type
         self.dob = dob
         self.user_class = user_class
-        self.created_at = created_at
         self.address = address
 
     def __repr__(self):
@@ -89,15 +88,13 @@ class Resources(db.Model):
 
     created_at = db.Column(db.DateTime, default=func.now())
 
-    def __init__(self, id, category, name, status, donated_by_id, taken_by_id, requested_by_id, created_at):
-        self.id = id
-        self.category = category
+    def __init__(self, type_id, name, status, donated_by_id, taken_by_id, requested_by_id):
+        self.type_id = type_id
         self.name = name
         self.status = status
         self.donated_by_id = donated_by_id
         self.taken_by_id = taken_by_id
         self.requested_by_id = requested_by_id
-        self.created_at = created_at
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
