@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-import datetime
+from datetime import datetime
 from wtforms import StringField,validators,SelectField,ValidationError,DateField
 from wtforms.widgets import TextArea
 
@@ -18,7 +18,11 @@ class DateOfBirthFied(DateField):
         if(self.data is None):
             raise ValidationError("Please enter a valid date")
         else:
-            #check if date is less than 1989 or greater than 2015
+            #u must not be more than 40 years old and less than 10 years 0ld
+           currentYear = datetime.now().date().year
+           dobYear  = self.data.year
+           if currentYear - dobYear > 40 or currentYear - dobYear < 10 :
+               raise ValidationError("Date out of range")
            pass
 
 
