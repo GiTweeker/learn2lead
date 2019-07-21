@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from form import DonateItemForm, RequestItemForm
 from flask_apscheduler import APScheduler
-
+from locale import getlocale
 from flask_caching import Cache
 import enum
 class UserType(enum.Enum):
@@ -50,21 +50,23 @@ def addcachedata():
 
     cache.set("resources-count", resources_count)
     cache.set("requester_count", requester_count)
-    print("Working on adding data")
+    app.logger.debug("Working on adding data")
 
 #app.apscheduler.add_job(func=addcachedata, trigger='date', interval=app.config('CACHE_DEFAULT_TIMEOUT'))
 #app.apscheduler.add_job(func=addcachedata, trigger='date', id='addcachedata')
 app.apscheduler.add_job(func=addcachedata,
                         trigger='interval',
                         next_run_time=datetime.now(),
-                        seconds=60,
-                        id='addcachedata',
-                        max_instances=1)
+                        seconds=app.config['SITE_TASK_CACHE_RUN'],
+                        id='addcachedata')
+
+
 
 
 class ResourceCategoriesTypesApi(Resource):
-
+    @cache.cached(timeout=50, query_string=True)
     def get(self, category_id):
+        print("Getting values")
         resource_types = ResourceTypes.query\
             .filter_by(category_id=category_id).order_by(ResourceTypes.name)
         return {
