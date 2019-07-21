@@ -7,24 +7,24 @@ AOS.init({
 
     "use strict";
 
-    var itemCategory = $("#itemCategory");
-    var itemType = $("#itemType");
-    var itemCategorySelected = itemCategory.find(":selected").val();
+    var itemCategory =  $("#itemCategory");
+    var itemType  = $("#itemType");
+    var itemCategorySelected  =  itemCategory.find(":selected").val();
     //
     var getItemCategoryTypes = function (value) {
         $.get(`/api/resource-categories/${value}/types`, function (data) {
-            if (data.success) {
+            if(data.success){
                 //append to item types
-
-                var itemTypes = data.data;
+                console.log(data.data);
+                var itemTypes  = data.data;
                 /*itemType
                 *<option selected="" value="pencil">Pencil</option>
                 * */
-                var htmlSelectOPtions = "";
+                var htmlSelectOPtions  = "";
                 itemType.html(htmlSelectOPtions)
 
-                itemTypes.forEach(function (itemType, index, types) {
-                    htmlSelectOPtions += `<option  value="${itemType.id}">${itemType.name}</option>`;
+                itemTypes.forEach(function(itemType, index, types){
+                      htmlSelectOPtions+= `<option  value="${itemType.id}">${itemType.name}</option>`;
 
                 });
 
@@ -34,16 +34,17 @@ AOS.init({
         });
     };
 
-    if (!!itemCategorySelected) {
+    if(!!itemCategorySelected){
         getItemCategoryTypes(itemCategorySelected);
     }
 
-    if (!!itemCategory) {
-        itemCategory.change(function (e) {
-            var value = $(this).find(":selected").val();
-            getItemCategoryTypes(value)
-        });
+    if(!!itemCategory){
+      itemCategory.change(function (e) {
+        var value  =  $(this).find(":selected").val();
+        getItemCategoryTypes(value)
+    });
     }
+
 
     $('#ftco-navbar').addClass('scrolled');
     $('#ftco-navbar').addClass('awake');

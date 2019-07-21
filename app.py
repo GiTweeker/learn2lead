@@ -38,12 +38,21 @@ class ResourceCategoriesTypesApi(Resource):
             'success' : True,
             'data': [marshal(types, resource_types_fields) for types in resource_types]}
 
-@app.route('/donate/requester/test')
-def test():
-    title = 'Request For An Item - Learn to lead is a platform for everybody.'
-    tpl = 'donaterequest'
-    resource_done = Resources.query.get(4)
-    return render_template('donate-request-done.html', title=title, tpl=tpl, resource=resource_done)
+@app.route('/contact')
+def contact():
+    title = 'Contact Us - Learn to lead is a platform for everybody.'
+    tpl = 'contact'
+
+    return render_template('contact.html', title=title, tpl=tpl)
+
+@app.route('/about')
+def about():
+    title = 'About Us - Learn to lead is a platform for everybody.'
+    tpl = 'about'
+
+    return render_template('about.html', title=title, tpl=tpl)
+
+
 
 @app.route('/donate/requester/done')
 def requesterdone():
