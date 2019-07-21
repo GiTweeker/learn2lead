@@ -7,7 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from form import DonateItemForm, RequestItemForm
 from flask_apscheduler import APScheduler
-from locale import getlocale
 from flask_caching import Cache
 import enum
 class UserType(enum.Enum):

@@ -1,4 +1,5 @@
-#!/Users/elijahedih/dev/python/learn2lead/venv/bin/python2.7
+#!/Users/elijahedih/dev/python/l2l/venv/bin/python
+
 # -*- coding: utf-8 -*-
 import re
 import sys
