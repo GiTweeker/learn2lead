@@ -29,7 +29,12 @@
 
                         <li class="list-group-item">We appreciate your interest in donating to people in need.<br/>
 
-                            Please contact the user on the mobile number to complete the donation
+                             {% if resource.requested_by %}
+                             Please contact the user on the mobile number to complete the donation
+                             {% else %}
+                                 We do not currently have anyone in need on this item. Once a request is made, You will be contacted immediately,
+                            {% endif %}
+
                         </li>
 
                         <li class="list-group-item text-center">

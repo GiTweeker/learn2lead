@@ -17,7 +17,7 @@ class Users(db.Model):
     created_at = db.Column(db.DateTime, default=func.now())
     address = db.Column(db.String(255), nullable=False)
 
-    def __init__(self,phone_number, name, email, sex, user_type, dob, user_class, address):
+    def __init__(self,phone_number, name, email, sex, user_type, dob, user_class, address,school):
 
         self.phone_number = phone_number
         self.name = name
@@ -27,6 +27,7 @@ class Users(db.Model):
         self.dob = dob
         self.user_class = user_class
         self.address = address
+        self.school = school
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -43,6 +44,7 @@ class Users(db.Model):
             'user_class': self.user_class,
             'created_at': self.created_at,
             'address': self.address,
+            'school': self.school,
         }
 
 

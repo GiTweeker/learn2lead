@@ -60,8 +60,6 @@ class RequestItemForm(FlaskForm):
                            choices=[("M", "Male"),("F","Female")])
 
     dateofbirth = DateOfBirthFied("Date Of Birth",[validators.DataRequired()],  format='%d/%m/%Y')
-    #dateofbirth = DateField("Date Of Birth", [validators.DataRequired()],  format='%d/%m/%Y')
-    #dateofbirth = StringField("Date Of Birth", [validators.DataRequired()])
 
     itemtype = ItemTypeSelectField(u'Item Type', [validators.DataRequired()],
                            choices=[(0, "")], coerce=int)

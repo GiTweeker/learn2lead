@@ -7,6 +7,7 @@ from form import DonateItemForm, RequestItemForm
 import enum
 class UserType(enum.Enum):
     VOLUNTEER = 'volunteer'
+    REQUESTER = 'requester'
 
 class ResourceStatus(enum.Enum):
     OPEN = 'open'
@@ -36,6 +37,24 @@ class ResourceCategoriesTypesApi(Resource):
         return {
             'success' : True,
             'data': [marshal(types, resource_types_fields) for types in resource_types]}
+
+@app.route('/donate/requester/test')
+def test():
+    title = 'Request For An Item - Learn to lead is a platform for everybody.'
+    tpl = 'donaterequest'
+    resource_done = Resources.query.get(4)
+    return render_template('donate-request-done.html', title=title, tpl=tpl, resource=resource_done)
+
+@app.route('/donate/requester/done')
+def requesterdone():
+    title = 'Request For An Item - Learn to lead is a platform for everybody.'
+    tpl = 'donaterequest'
+    resourceid = session.pop('resource-id',None)
+    if resourceid is None:
+        return redirect(url_for('home'))
+    else:
+        resource_done = Resources.query.get(resourceid)
+        return render_template('donate-request-done.html', title=title, tpl=tpl, resource=resource_done)
 
 
 @app.route('/donate/volunteer/done')
@@ -68,7 +87,46 @@ def donaterequest():
 
     if request.method == 'POST':
         if form.validate():
+
             print("form is valid")
+            #phone_number, name, email, sex, user_type, dob, user_class, address
+            requester = Users(form.mobileno.data, form.name.data, form.email.data
+                              , form.sex.data, UserType.REQUESTER.value,
+                              form.dateofbirth.data, form.schoolclass.data, form.contactadd.data,form.school.data)
+
+            db.session.add(requester)
+            db.session.commit()
+            db.session.flush()
+
+            requested_resource = Resources.query\
+                .filter(Resources.type_id == form.itemtype.data)\
+                .filter(Resources.status == ResourceStatus.OPEN.value)\
+                .filter(Resources.requested_by_id == None)\
+                .filter(Resources.taken_by_id == None)\
+                .filter(Resources.donated_by_id != None)\
+                .order_by(desc(Resources.created_at)).first()
+
+            if requested_resource is not None:
+                db.session.query(Resources). \
+                    filter(Resources.id == requested_resource.id). \
+                    update({"taken_by_id": requester.id, "status": ResourceStatus.CLOSED.value})
+
+                db.session.commit()
+                db.session.flush()
+            else:
+
+                #type_id, name, status, donated_by_id, taken_by_id, requested_by_id
+                requested_resource = Resources(form.itemtype.data, None, ResourceStatus.OPEN.value,
+                                             None, None, requester.id)
+                db.session.add(requested_resource)
+                db.session.commit()
+                db.session.flush()
+
+            session.setdefault('resource-id', requested_resource.id)
+            return redirect(url_for('requesterdone'))
+
+
+
         else :
             print("Error in form")
             print(form.errors)
@@ -90,21 +148,31 @@ def donateVolunteer():
        if form.validate():
         #find if a resource exist that no volunteer exist for that type.. if none then create new resource
         volunteer  = Users(form.mobileno.data,form.name.data, form.email.data
-                           ,None, UserType.VOLUNTEER.value, None, None, form.contactadd.data)
+                           ,None, UserType.VOLUNTEER.value, None, None, form.contactadd.data,None)
 
         db.session.add(volunteer)
         db.session.commit()
         db.session.flush()
 
-        requested_resource = Resources\
-            .query.filter_by(type_id=form.itemtype.data,status=ResourceStatus.OPEN.value,donated_by_id=None)\
+        requested_resource = Resources.query \
+            .filter(Resources.type_id == form.itemtype.data) \
+            .filter(Resources.status == ResourceStatus.OPEN.value) \
+            .filter(Resources.donated_by_id == None) \
+            .filter(Resources.taken_by_id == None) \
+            .filter(Resources.requested_by_id != None) \
             .order_by(desc(Resources.created_at)).first()
+
+
+        # requested_resource = Resources\
+        #     .query.filter_by(type_id=form.itemtype.data,status=ResourceStatus.OPEN.value,donated_by_id=None)\
+        #     .order_by(desc(Resources.created_at)).first()
 
 
         if requested_resource is not None :
             db.session.query(Resources). \
                  filter(Resources.id == requested_resource.id). \
-                update({"donated_by_id": volunteer.id,"status":ResourceStatus.CLOSED.value})
+                update({"donated_by_id": volunteer.id,"status":ResourceStatus.CLOSED.value,
+                        "taken_by_id":requested_resource.taken_by_id})
 
             db.session.commit()
             db.session.flush()
