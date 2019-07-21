@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, jsonify, json, url_for, redir
 from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
-from form import DonateItemForm
+from form import DonateItemForm, RequestItemForm
 import enum
 class UserType(enum.Enum):
     VOLUNTEER = 'volunteer'
@@ -58,9 +58,26 @@ def home():
     return render_template('index.html',title=title,tpl=tpl)
 
 
+@app.route('/donate/request',methods=('GET', 'POST'))
+def donaterequest():
+    title = 'Request for an item - Learn to lead is a platform for everybody.'
+    tpl = 'donateRequest'
+    form = RequestItemForm(request.form)
+    form.itemcat.choices = [(r.id, r.name) for
+                            r in ResourceCategories.query.order_by(ResourceCategories.name)]
 
+    if request.method == 'POST':
+        if form.validate():
+            print("form is valid")
+        else :
+            print("Error in form")
+            print(form.errors)
+            print(form.data)
+            pass
+    else :
+        pass
 
-
+    return render_template('donate-request.html',title=title,tpl=tpl,form=form)
 
 @app.route('/donate/volunteer',methods=('GET', 'POST'))
 def donateVolunteer():
