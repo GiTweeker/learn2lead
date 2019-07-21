@@ -1,9 +1,14 @@
+from datetime import datetime
+
 from flask_restful import Resource, Api, marshal,fields
-from flask import Flask, render_template, request, jsonify, json, url_for, redirect, flash, session
+from flask import Flask, render_template, request, url_for, redirect, session
 from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from form import DonateItemForm, RequestItemForm
+from flask_apscheduler import APScheduler
+
+from flask_caching import Cache
 import enum
 class UserType(enum.Enum):
     VOLUNTEER = 'volunteer'
@@ -23,11 +28,39 @@ app = Flask(__name__,instance_relative_config=False)
 app.config.from_pyfile('config_file.cfg')
 api = Api(app)
 
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
+
+
 csrf = CSRFProtect()
 csrf.init_app(app)
 
+cache = Cache(app)
+
+
 db = SQLAlchemy(app)
 from models import Resources,Users,ResourceCategories,ResourceTypes
+
+
+def addcachedata():
+    resources_count  = db.session.query(Resources.id).count()
+    requester_count  =  db.session.query(Resources). \
+                    filter(Resources.taken_by_id != None).count()
+
+    cache.set("resources-count", resources_count)
+    cache.set("requester_count", requester_count)
+    print("Working on adding data")
+
+#app.apscheduler.add_job(func=addcachedata, trigger='date', interval=app.config('CACHE_DEFAULT_TIMEOUT'))
+#app.apscheduler.add_job(func=addcachedata, trigger='date', id='addcachedata')
+app.apscheduler.add_job(func=addcachedata,
+                        trigger='interval',
+                        next_run_time=datetime.now(),
+                        seconds=60,
+                        id='addcachedata',
+                        max_instances=1)
+
 
 class ResourceCategoriesTypesApi(Resource):
 
@@ -83,7 +116,19 @@ def home():
 
     title = 'Learn to lead is a platform for everybody.'
     tpl = 'home'
-    return render_template('index.html',title=title,tpl=tpl)
+    resources_count = cache.get("resources-count")
+    requester_count = cache.get("requester_count")
+
+
+    # resources_count  = cache.get("resources-count")
+    #
+    # if resources_count == None :
+    #     resources_count  = db.session.query(Resources.id).count()
+    #     cache.set("resources-count", resources_count)
+
+    return render_template('index.html',title=title,tpl=tpl,
+                           requester_count=requester_count,
+                           resources_count=resources_count)
 
 
 @app.route('/donate/request',methods=('GET', 'POST'))
