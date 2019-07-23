@@ -1,6 +1,7 @@
 
 
 
+
 {% extends 'layout-base.html' %}
 {% block title %} {{ title }}{% endblock %}
 
@@ -23,17 +24,28 @@
                             {{ form.email(class="form-control",  placeholder="Your Email") }}
                         </div>
                         <div class="form-group">
+
+                         {% if 'mobileno' in form.errors %}
+                            {{ form.mobileno(class="form-control is-invalid ",  placeholder="Your Mobile Number") }}
+                           <div class="invalid-feedback">
+                                    {{ form.errors.mobileno[0] }}
+                            </div>
+
+
+                        {% else %}
                             {{ form.mobileno(class="form-control",  placeholder="Your Mobile Number") }}
                         </div>
+                        {% endif %}
                         <div class="form-group">
                             {{ form.contactadd(class="form-control",  placeholder="Contact Address", cols="35", rows="2") }}
-                        </div>
-                        <div class="form-group">
-                          {{ form.school(class="form-control",  placeholder="Your School") }}
 
                         </div>
-                       <div class="form-group">
-                          {{ form.schoolclass(class="form-control",  placeholder="Class in School") }}
+                        <div class="form-group">
+                            {{ form.school(class="form-control",  placeholder="Your School") }}
+
+                        </div>
+                        <div class="form-group">
+                            {{ form.schoolclass(class="form-control",  placeholder="Class in School") }}
 
                         </div>
                         <div class="row d-md-flex">

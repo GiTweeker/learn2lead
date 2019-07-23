@@ -30,7 +30,7 @@ class DateOfBirthFied(DateField):
 class DonateItemForm(FlaskForm):
     name = StringField("Your Name", [validators.Length(min=4, max=25), validators.DataRequired()])
     email = StringField("Your Email", [validators.email(), validators.DataRequired()])
-    mobileno = StringField("Your Mobile Number", [validators.Length(min=11, max=11), validators.DataRequired()])
+    mobileno = StringField("Your Mobile Number", [validators.length(11), validators.DataRequired()])
     contactadd = StringField("Your Contact Address",
                              [validators.length(min=3, max=200), validators.DataRequired()],
                              widget=TextArea())
@@ -48,7 +48,7 @@ class DonateItemForm(FlaskForm):
 class RequestItemForm(FlaskForm):
     name = StringField("Your Name", [validators.Length(min=4, max=25), validators.DataRequired()])
     email = StringField("Your Email", [validators.email(), validators.DataRequired()])
-    mobileno = StringField("Your Mobile Number", [validators.Length(min=11, max=11), validators.DataRequired()])
+    mobileno = StringField("Your Mobile Number", [validators.length(11), validators.DataRequired()])
     contactadd = StringField("Your Contact Address",
                              [validators.length(min=3, max=200), validators.DataRequired()],
                              widget=TextArea())
