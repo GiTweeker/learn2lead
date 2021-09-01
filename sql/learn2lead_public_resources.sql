@@ -1,0 +1,7 @@
+INSERT INTO public.resources (id, type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at) VALUES (7, 4, 'dsdsdsd', 'closed', 22, null, 5, '2019-07-20 21:30:43.442401');
+INSERT INTO public.resources (id, type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at) VALUES (6, 4, 'assdsds', 'closed', 20, null, 5, '2019-07-20 18:05:29.422925');
+INSERT INTO public.resources (id, type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at) VALUES (5, 2, 'Old Physics Textbook', 'closed', 19, null, 5, '2019-07-20 17:16:35.593949');
+INSERT INTO public.resources (id, type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at) VALUES (4, 2, '2', 'open', 22, null, 21, '2019-07-20 17:13:21.744804');
+INSERT INTO public.resources (id, type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at) VALUES (8, 4, 'I am Ready to Pay for your Primary School Fees', 'closed', 23, 24, null, '2019-07-21 11:38:15.326743');
+INSERT INTO public.resources (id, type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at) VALUES (9, 4, 'I got money for your fees', 'closed', 25, 26, null, '2019-07-21 11:43:22.293910');
+INSERT INTO public.resources (id, type_id, name, status, donated_by_id, taken_by_id, requested_by_id, created_at) VALUES (13, 4, null, 'closed', 32, null, 31, '2019-07-27 21:39:14.739510');
